@@ -40,3 +40,16 @@ def from_666_to_140(filename,list1):
 #    data = data[:,0]
 #    for i in range(len(data)):
 #        print str(float(data[i]))[:7]
+    
+def to_csv(file_name,list_r):
+    import time
+    now = time.strftime('-%m-%d-%H-%M')
+    fullname=file_name+now+'.csv'
+    csvfile=file(fullname,'wb')
+    writer=csv.writer(csvfile)
+    writer.writerow(['predict_date','predict_quantity'])
+    for i in range(len(list_r)):
+        data=[201711,float(list_r[i])]
+        writer.writerow(data)
+
+    csvfile.close()

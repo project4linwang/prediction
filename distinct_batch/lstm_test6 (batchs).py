@@ -12,6 +12,7 @@ import math
 import matplotlib.pyplot as plt
 from model import net
 from input_data2_1 import  make_lstm5_batch3, get_test3_data3, get_base_data
+import util
 
 filename = './data/data_six_fill.csv' #使用的原始训练数据
 duration = 20#每次训练使用的序列长度
@@ -23,6 +24,8 @@ channels=1
 total_cars=666
 n_result=[]
 total=[]
+class_id=140
+
 for batch in range(total_cars):
     tf.reset_default_graph() #reset一下比较好
     sess = tf.Session() #开一个新session
@@ -112,17 +115,27 @@ for batch in range(total_cars):
     sess.close()
     
 base_data=get_base_data(filename)
-for i in range(0,total_cars):
-    diff=math.pow((n_result[i][0]-base_data[i]),2)
+base_data=util.from_666_to_140(filename,base_data)
+listtemp=[]
+listout=[]
+for item in n_result:
+    listtemp.append(item[0])
+    listout.append(item[1])
+listIDK=util.from_666_to_140(filename,listtemp)
+output=util.from_666_to_140(filename,listout)
+util.to_csv('multi_bat',output)
+
+for i in range(0,class_id):
+    diff=math.pow((listIDK[i]-base_data[i]),2)
     total_score=total_score+diff
             
-total_score=math.sqrt(total_score/666)    
-print total_score
+total_score=math.sqrt(total_score/140)    
+total1=0
+total2=0
 #total=np.sum(n_result,0)
 for i in range(0,total_cars):
-    for j in range(0,1):
-        total[i]=total[i]+n_result[i][j]
+    total1=total1+n_result[i][0]
+    total2=total2+n_result[i][1]
+print total_score,total1,total2
 plt.figure()
-plt.plot(n_result)
-
-
+plt.plot(output)
