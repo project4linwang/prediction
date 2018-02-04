@@ -14,9 +14,9 @@ from model import net
 from input_data2_1 import  make_lstm5_batch3, get_test3_data3, get_base_data
 import util
 
-filename = './data/data_six_fill.csv' #使用的原始训练数据
-duration = 20#每次训练使用的序列长度
-n_hidden = 512
+filename = './data/data_six.csv' #使用的原始训练数据
+duration = 10#每次训练使用的序列长度
+n_hidden = 64
 #lstm神经元个数
 n_layer = 2 #lstm层数
 test_datas = 3 #预测数据点个数
@@ -54,10 +54,10 @@ for batch in range(total_cars):
     
 #    base_data=get_base_data(filename)
     min_score=100
-    for step in range(1000):
+    for step in range(200):
         _,loss_value = sess.run([train_op,loss_op])
         #print (loss_value)
-        if step % 200 == 100:
+        if step % 199 == 0:
             prime, ori_data = get_test3_data3(filename,duration,batch)
             temp_state = sess.run(test_istate)
             for i in range(ori_data.shape[0]):
@@ -86,7 +86,7 @@ for batch in range(total_cars):
     #            result[i,:] = result[i-1,:] * temp_result
     #            result[result<0] = 0
                 temp_result = test_result[i]
-                temp_result = np.log(1/temp_result-1)
+                temp_result = np.log(2/(temp_result+1)-1)
                 result[i] = result[i-1] * temp_result*(-1)
                 result[result<0] = 0
                 

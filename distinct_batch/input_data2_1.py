@@ -161,7 +161,7 @@ def make_lstm5_batch3(filename,duration,batch,shuffle=False):
     #让序列中的后一个值减去前一个值    
     data = -1*(data[1:,:] / data[:-1,:])
     
-    data = 1/(1+np.exp(data))
+    data = 2/(1+np.exp(data))-1
         #得到数据维度
     data_len = data.shape[0]
 #    channels = data.shape[1]
@@ -310,7 +310,7 @@ def get_test3_data3(filename,duration,batch):
     data[data==0] = 1
     ori_data = data.copy()
     data = -1*(data[1:,:] / data[:-1,:])    
-    data = 1/(1+np.exp(data))
+    data = 2/(1+np.exp(data))-1
     output = data[-duration:,batch]
     output.shape = (1,duration,-1)
     return output, ori_data[-duration:,batch]

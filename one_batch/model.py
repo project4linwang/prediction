@@ -4,7 +4,8 @@ Created on Wed Jan 10 11:26:57 2018
 
 @author: charlie
 """
-import tensorflow as tf
+
+import tensorflow.python as tf
 import numpy as np
 from ops import fc, causal_conv
 
@@ -17,7 +18,7 @@ def net(x,n_hidden,n_layer,reuse=False):
         #定义一个LSTM cell
         cell = tf.nn.rnn_cell.LSTMCell(n_hidden)
         if not reuse:
-            cell = tf.nn.rnn_cell.DropoutWrapper(cell,output_keep_prob=0.5)
+            cell = tf.nn.rnn_cell.DropoutWrapper(cell,output_keep_prob=0.4)
         #定义多层LSTM cell
         cells = tf.nn.rnn_cell.MultiRNNCell([cell]*n_layer,state_is_tuple=True)
         #得到初始状态
