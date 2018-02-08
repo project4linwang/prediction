@@ -11,19 +11,18 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 from model import net
-from input_data2_1 import  make_lstm5_batch2, get_test3_data2,make_lstm5_batch2_1, get_test3_data2_1, get_base_data
+from input_data2_1 import make_lstm5_batch2_1, get_test3_data2_1, get_base_data
 import util
 
 tf.reset_default_graph() #reset一下比较好
 sess = tf.Session() #开一个新session
-filename = './data/data_six_fill.csv' #使用的原始训练数据
-duration = 20 #每次训练使用的序列长度
-n_hidden = 512
- #lstm神经元个数
-n_layer = 3 #lstm层数
+filename = './data/data_six_clip.csv' #使用的原始训练数据
+duration =20 #每次训练使用的序列长度
+n_hidden = 64 #lstm神经元个数
+n_layer = 2 #lstm层数
 test_datas = 3 #预测数据点个数
 class_id=140
-
+fileN='s-'+str(duration)+'-'+str(n_hidden)+'-c'
 #制作输入训练数据队列
 #input_data,input_label = make_lstm5_batch(filename,duration,False) 
 input_data,input_label = make_lstm5_batch2_1(filename,duration,False)
@@ -53,10 +52,11 @@ tf.train.start_queue_runners(sess=sess)
 base_data=get_base_data(filename)
 base_data=util.from_666_to_140(filename,base_data)
 min_score=100
-for step in range(100000):
+losses=[]
+for step in range(50100):
     _,loss_value = sess.run([train_op,loss_op])
     #print (loss_value)
-    if step % 200 == 100:
+    if step % 100 == 99:
         prime, ori_data = get_test3_data2_1(filename,duration)
         temp_state = sess.run(test_istate)
         for i in range(ori_data.shape[0]):
@@ -96,10 +96,11 @@ for step in range(100000):
             total_score=total_score+diff
             
 #        print total_score
-        total_score=math.sqrt(total_score/class_id)            
+#        total_score=math.sqrt(total_score/class_id)            
         n_result = np.sum(result,1)
         #output 1:201710 ; 2:201711
-        print(total_score,n_result[1],n_result[2],loss_value)
+        print(n_result[1],loss_value)
+        losses.append(loss_value)
         #record min level
 #        if total_score<min_score :
 #            min_score=total_score    
@@ -153,9 +154,10 @@ for i in range(1,test_datas):
 
 result = np.sum(result,1)
 '''
-plt.plot(test_result)
 plt.figure()
-plt.plot(n_result)
-
+plt.plot(listIDK)
+plt.figure()
+plt.plot(losses)
+util.to_csv(fileN,listIDK)
 #print(result[1])
 

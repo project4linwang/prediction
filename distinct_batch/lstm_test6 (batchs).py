@@ -14,9 +14,9 @@ from model import net
 from input_data2_1 import  make_lstm5_batch3, get_test3_data3, get_base_data
 import util
 
-filename = './data/data_six.csv' #使用的原始训练数据
-duration = 10#每次训练使用的序列长度
-n_hidden = 64
+filename = './data/data_six_clip.csv' #使用的原始训练数据
+duration = 5#每次训练使用的序列长度
+n_hidden = 256
 #lstm神经元个数
 n_layer = 2 #lstm层数
 test_datas = 3 #预测数据点个数
@@ -25,6 +25,8 @@ total_cars=666
 n_result=[]
 total=[]
 class_id=140
+
+fileN='multi-'+duration+'-'+n_hidden+'-c'
 
 for batch in range(total_cars):
     tf.reset_default_graph() #reset一下比较好
@@ -54,7 +56,7 @@ for batch in range(total_cars):
     
 #    base_data=get_base_data(filename)
     min_score=100
-    for step in range(200):
+    for step in range(5000):
         _,loss_value = sess.run([train_op,loss_op])
         #print (loss_value)
         if step % 199 == 0:
@@ -123,7 +125,8 @@ for item in n_result:
     listout.append(item[1])
 listIDK=util.from_666_to_140(filename,listtemp)
 output=util.from_666_to_140(filename,listout)
-util.to_csv('multi_bat',output)
+
+util.to_csv(fileN,output)
 
 for i in range(0,class_id):
     diff=math.pow((listIDK[i]-base_data[i]),2)

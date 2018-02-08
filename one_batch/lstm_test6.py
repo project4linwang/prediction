@@ -40,8 +40,8 @@ def make_test():
 tf.reset_default_graph() #reset一下比较好
 sess = tf.Session() #开一个新session
 filename = './data/data_six.csv' #使用的原始训练数据
-duration = 10 #每次训练使用的序列长度
-n_hidden = 64 #lstm神经元个数
+duration = 20 #每次训练使用的序列长度
+n_hidden = 128 #lstm神经元个数
 n_layer = 1 #lstm层数
 test_datas = 70 #预测数据点个数
 

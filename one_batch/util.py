@@ -40,3 +40,25 @@ def from_666_to_140(filename,list1):
 #    data = data[:,0]
 #    for i in range(len(data)):
 #        print str(float(data[i]))[:7]
+    
+def to_csv(file_name,list_r):
+    import time
+    idfile=open(classidfile,'r')
+    idreader=csv.reader(idfile)
+    classid_total=[]
+    for item in idreader:
+        classid_total.append([item,0])
+    
+    classid_total=classid_total[1:]
+    
+    now = time.strftime('%m-%d-%H-%M-')
+    fullname=now+file_name+'.csv'
+    csvfile=file(fullname,'wb')
+    writer=csv.writer(csvfile)
+    writer.writerow(['predict_date','class_id','predict_quantity'])
+    for i in range(len(list_r)):
+        data=[201711,str(classid_total[i][0])[2:-2],int(list_r[i])]
+        writer.writerow(data)
+    
+    print now
+    csvfile.close()

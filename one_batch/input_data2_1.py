@@ -49,26 +49,34 @@ def make_lstm4_batch(filename,duration,shuffle=False):
     data = genfromtxt(filename, delimiter=',', skip_header=1)
     #第一列为日期，不要
     data = data[:,1:]
+#    to_tile = data[:,-22:-2]
+#    tile = np.tile(to_tile,[1,3])
+#    data = np.hstack((data,tile))
     #转置
     data = data.T
+    target = data[-1,:]
+    data[data==0] = 1
+    
     #让序列中的后一个值减去前一个值
-    data = data[1:,:] - data[:-1,:]
-    #将以上差值变成对数
-    data[data>0] = np.log(data[data>0])
-    data[data<0] = -np.log(-data[data<0])
+    data = -1*(data[1:,:] / data[:-1,:])
+    
+    data = 2/(1+np.exp(data))-1
+    
+#    data[data>0] = np.log(data[data>0])
+#    data[data<0] = -np.log(-data[data<0])
     #得到数据维度
     data_len = data.shape[0]
     channels = data.shape[1]
     #变成常数tensor
     data = tf.convert_to_tensor(data,name='raw_data',dtype=tf.float32)
     #使用tensorflow自带的自动编号器来制作输入队列
-    epoch_size = data_len - duration # 69 - 20 = 49
+    epoch_size = data_len - duration
     i = tf.train.range_input_producer(epoch_size, shuffle=shuffle).dequeue()
     x = tf.slice(data, [i,0], [duration, channels])
     y = tf.slice(data, [i+1,0], [duration, channels])
     x = tf.expand_dims(x,0)
     y = tf.expand_dims(y,0)
-    return x,y
+    return x,y,target
     
 def make_lstm5_batch(filename,duration,shuffle=False):
     #读取csv文件
@@ -127,7 +135,7 @@ def make_lstm5_batch2_1(filename,duration,shuffle=False):
     #读取csv文件
     data = genfromtxt(filename, delimiter=',', skip_header=1)
     #第一列为日期，不要 -201710 data
-    data = data[:,1:-1]
+    data = data[:,1:]
     
     #转置
     data = data.T
@@ -293,7 +301,7 @@ def get_test3_data2(filename,duration):
 
 def get_test3_data2_1(filename,duration):
     data = genfromtxt(filename, delimiter=',', skip_header=1)
-    data = data[:,1:-1]
+    data = data[:,1:]
     data = data.T
     data[data==0] = 1
     ori_data = data.copy()

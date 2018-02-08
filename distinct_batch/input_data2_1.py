@@ -154,7 +154,7 @@ def make_lstm5_batch3(filename,duration,batch,shuffle=False):
     #读取csv文件
     data = genfromtxt(filename, delimiter=',', skip_header=1)
     #第一列为日期，不要 -201710 data
-    data = data[:,1:-1]
+    data = data[:,1:]
     #转置
     data = data.T
     data[data==0] = 1
@@ -305,7 +305,7 @@ def get_test3_data2_1(filename,duration):
 
 def get_test3_data3(filename,duration,batch):
     data = genfromtxt(filename, delimiter=',', skip_header=1)
-    data = data[:,1:-1]
+    data = data[:,1:]
     data = data.T
     data[data==0] = 1
     ori_data = data.copy()
@@ -321,5 +321,5 @@ def get_base_data(filename):
     data = data.T
     data[data==0] = 1
     ori_data = data.copy()
-    return ori_data[-1,:]
+    return ori_data[-12,:]
 

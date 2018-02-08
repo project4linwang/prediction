@@ -42,7 +42,7 @@ def from_666_to_140(filename,list1):
 #        print str(float(data[i]))[:7]
     
 def to_csv(file_name,list_r):
-    import time
+    import time    
     now = time.strftime('-%m-%d-%H-%M')
     fullname=file_name+now+'.csv'
     csvfile=file(fullname,'wb')
