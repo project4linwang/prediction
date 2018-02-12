@@ -327,7 +327,7 @@ def get_base_data(filename):
     data = genfromtxt(filename, delimiter=',', skip_header=1)
     data = data[:,1:]
     data = data.T
-    data[data==0] = 1
+#    data[data==0] = 1
     ori_data = data.copy()
     return ori_data[-1,:]
 

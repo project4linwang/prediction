@@ -17,6 +17,7 @@ import util
 tf.reset_default_graph() #reset一下比较好
 sess = tf.Session() #开一个新session
 filename = './data/data_six_clip.csv' #使用的原始训练数据
+TRfilename = './data/tr_1.csv' #使用的原始训练数据
 duration =20 #每次训练使用的序列长度
 n_hidden = 64 #lstm神经元个数
 n_layer = 2 #lstm层数
@@ -49,11 +50,11 @@ sess.run(tf.global_variables_initializer())
 tf.train.start_queue_runners(sess=sess)
 #开始训练循环
 
-base_data=get_base_data(filename)
-base_data=util.from_666_to_140(filename,base_data)
+base_data=get_base_data(TRfilename)
+#print base_data
 min_score=100
 losses=[]
-for step in range(50100):
+for step in range(10100):
     _,loss_value = sess.run([train_op,loss_op])
     #print (loss_value)
     if step % 100 == 99:
@@ -91,15 +92,20 @@ for step in range(50100):
         
 #        print np.sum(base_data,0)
         listIDK=util.from_666_to_140(filename,result[1])
+        count=0
         for i in range(0,class_id):
-            diff=math.pow((listIDK[i]-base_data[i]),2)
-            total_score=total_score+diff
+            if(base_data[i]!=0):
+                count=count+1
+                diff=math.pow((listIDK[i]-base_data[i]),2)
+                total_score=total_score+diff
             
 #        print total_score
-#        total_score=math.sqrt(total_score/class_id)            
+        total_score=math.sqrt(total_score/18)            
         n_result = np.sum(result,1)
         #output 1:201710 ; 2:201711
-        print(n_result[1],loss_value)
+        print(total_score,n_result[1],loss_value)
+        if(n_result[1]>=55000 and total_score<=230):
+            util.to_csv(fileN,listIDK)
         losses.append(loss_value)
         #record min level
 #        if total_score<min_score :
