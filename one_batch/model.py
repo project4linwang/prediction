@@ -16,7 +16,7 @@ def net(x,n_hidden,n_layer,reuse=False):
         duration = x.get_shape()[1].value
         channels = x.get_shape()[2].value
         #定义一个LSTM cell
-        cell = tf.nn.rnn_cell.LSTMCell(n_hidden,forget_bias=15)
+        cell = tf.nn.rnn_cell.LSTMCell(n_hidden,forget_bias=14)
         if not reuse:
             cell = tf.nn.rnn_cell.DropoutWrapper(cell,output_keep_prob=0.5)
         #定义多层LSTM cell

@@ -97,15 +97,16 @@ for step in range(10100):
             if(base_data[i]!=0):
                 count=count+1
                 diff=math.pow((listIDK[i]-base_data[i]),2)
+                listIDK[i]=base_data[i]
                 total_score=total_score+diff
             
 #        print total_score
-        total_score=math.sqrt(total_score/18)            
+        total_score=math.sqrt(total_score/count)            
         n_result = np.sum(result,1)
         #output 1:201710 ; 2:201711
         print(total_score,n_result[1],loss_value)
-        if(n_result[1]>=55000 and total_score<=230):
-            util.to_csv(fileN,listIDK)
+        if(n_result[1]>=55000 and total_score<=220):
+            util.to_csv(fileN+'O',listIDK)
         losses.append(loss_value)
         #record min level
 #        if total_score<min_score :
